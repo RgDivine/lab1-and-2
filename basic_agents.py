@@ -1,19 +1,30 @@
-from spade.agent import Agent
-from spade.behaviour import CyclicBehaviour
 import asyncio
 
-class BasicAgent(Agent):
-    class HelloBehaviour(CyclicBehaviour):
-        async def run(self):
-            print(f"{self.agent.jid} is running...")
-            await asyncio.sleep(5)
+# --- define the Agent class ---
+class Agent:
+    async def start(self):
+        print("Agent started...")
+        # simulate some ongoing work
+        while True:
+            await asyncio.sleep(1)  # pretend agent is doing something
 
-    async def setup(self):
-        print("BasicAgent starting...")
-        self.add_behaviour(self.HelloBehaviour())
+    async def stop(self):
+        print("Agent stopped.")
 
+# create an instance of the agent
+agent = Agent()  # pass any required arguments if needed
+
+async def main():
+    try:
+        # start the agent
+        await agent.start()
+    except KeyboardInterrupt:
+        # allow stopping with Ctrl+C
+        pass
+    finally:
+        # stop the agent cleanly
+        await agent.stop()
+
+# run the main coroutine
 if __name__ == "__main__":
-    agent = BasicAgent("basicagent@localhost", "password")
-    agent.start()
-    input("Press ENTER to stop the agent")
-    agent.stop()
+    asyncio.run(main())
